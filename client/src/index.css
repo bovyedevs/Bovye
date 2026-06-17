@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+  --font-body: "DM Sans", sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif ;
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+
+  /* Light mode colors */
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(36 50% 6%);
+
+  --color-card: hsl(0 0% 99%);
+  --color-card-foreground: hsl(36 50% 6%);
+
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(36 50% 6%);
+
+  --color-primary: hsl(36 50% 6%);
+  --color-primary-foreground: hsl(38 100% 95%);
+
+  --color-secondary: hsl(36 20% 88%);
+  --color-secondary-foreground: hsl(36 50% 6%);
+
+  --color-muted: hsl(36 20% 90%);
+  --color-muted-foreground: hsl(36 15% 40%);
+
+  --color-accent: hsl(24 100% 50%);
+  --color-accent-foreground: hsl(38 100% 95%);
+
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  --color-border: hsl(36 20% 85%);
+  --color-input: hsl(36 20% 85%);
+  --color-ring: hsl(36 50% 6%);
+
+  --radius-lg: 0.75rem;
+
+  --image-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+@supports (selector(:root.dark)) {
+  :root.dark {
+    --color-background: hsl(220 25% 12%);
+    --color-foreground: hsl(38 100% 95%);
+
+    --color-card: hsl(220 25% 16%);
+    --color-card-foreground: hsl(38 100% 95%);
+
+    --color-popover: hsl(220 25% 14%);
+    --color-popover-foreground: hsl(38 100% 95%);
+
+    --color-primary: hsl(36 50% 6%);
+    --color-primary-foreground: hsl(38 100% 95%);
+
+    --color-secondary: hsl(220 20% 25%);
+    --color-secondary-foreground: hsl(38 100% 95%);
+
+    --color-muted: hsl(220 15% 30%);
+    --color-muted-foreground: hsl(36 15% 70%);
+
+    --color-accent: hsl(24 100% 50%);
+    --color-accent-foreground: hsl(220 25% 12%);
+
+    --color-destructive: hsl(0 84% 60%);
+    --color-destructive-foreground: hsl(220 25% 12%);
+
+    --color-border: hsl(220 15% 25%);
+    --color-input: hsl(220 15% 25%);
+    --color-ring: hsl(24 100% 50%);
+  }
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 36 50% 6%;
+  --border: 36 20% 85%;
+  --gradient-rainbow: linear-gradient(135deg, #FF6B00 0%, #FF0080 25%, #9B00FF 50%, #00C2FF 75%, #00E676 100%);
+}
+
+:root.dark {
+  --background: 220 25% 12%;
+  --foreground: 38 100% 95%;
+  --border: 220 15% 25%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply transition-colors duration-300;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-extrabold;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    background: var(--gradient-rainbow);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(0.3px);
+  }
+
+  .gradient-bg {
+    background: var(--gradient-rainbow);
+    opacity: 0.5;
+    filter: blur(6px);
+  }
+
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--background));
+    z-index: 0;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: var(--gradient-rainbow);
+    z-index: -1;
+    opacity: 0.6;
+    filter: blur(4px);
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.85), rgba(255, 0, 128, 0.85), rgba(155, 0, 255, 0.85), rgba(0, 194, 255, 0.85));
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255, 107, 0, 0.3);
+  }
+
+  .btn-gradient::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .btn-gradient:hover::after {
+    transform: translateX(100%);
+  }
+
+  .card-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(26, 18, 8, 0.08);
+  }
+
+  .dark .card-lift:hover {
+    box-shadow: 0 12px 40px rgba(255, 107, 0, 0.15);
+  }
+
+  .noise-bg {
+    background-image: var(--image-noise);
+  }
+}

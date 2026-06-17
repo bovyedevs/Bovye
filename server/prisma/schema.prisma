@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String?
+  startupType  String?
+  company      String?
+  industry     String?
+  bio          String?
+  skills       String[]
+  interests    String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  profile        Profile?
+  goals          Goal[]
+  roadmapPhases  RoadmapPhase[]
+  notifications  Notification[]
+  learningProgress LearningProgress[]
+  toolkitData    ToolkitData[]
+  courses        Course[]
+}
+
+model Profile {
+  id               String  @id @default(uuid())
+  userId           String  @unique
+  user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notificationTime String  @default("09:00")
+  theme            String  @default("system")
+  onboardingComplete Boolean @default(false)
+}
+
+model Goal {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  description   String?
+  deadline      String?
+  priority      String   @default("medium")
+  completed     Boolean  @default(false)
+  linkedTaskIds String[]
+  createdAt     String   @default("")
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([completed])
+}
+
+model RoadmapPhase {
+  id               String     @id @default(uuid())
+  userId           String
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId       String?
+  title            String
+  progressPercentage Int     @default(0)
+  order            Int        @default(0)
+  milestones       Milestone[]
+
+  @@index([userId])
+}
+
+model Milestone {
+  id              String   @id @default(uuid())
+  phaseId         String
+  phase           RoadmapPhase @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  title           String
+  isCompleted     Boolean  @default(false)
+  order           Int      @default(0)
+  tasks           Task[]
+
+  @@index([phaseId])
+}
+
+model Task {
+  id            String   @id @default(uuid())
+  milestoneId   String
+  milestone     Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  title         String
+  status        String   @default("pending")
+  duration      String?
+  assignedDate  String?
+  order         Int      @default(0)
+  dependencies  String[]
+
+  @@index([milestoneId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String
+  read      Boolean  @default(false)
+  createdAt String   @default("")
+
+  @@index([userId])
+  @@index([read])
+}
+
+model LearningProgress {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId    String
+  resourceId String
+  completed  Boolean  @default(false)
+
+  @@unique([userId, trackId, resourceId])
+  @@index([userId])
+}
+
+model ToolkitData {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  String   // 'idea', 'pitchDeck', 'funding', 'docs'
+  data      Json
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, category])
+  @@index([userId])
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  mentorId    String
+  mentor      User     @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  modules     Json     // array of { id, title, content, duration }
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([mentorId])
+}
