@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Home, Search, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { BovyeLogo } from '@/components/layout/Sidebar';
+import  BovyeLogo  from '../components/layout/BovyeLogo';
 
 const suggestions = [
   { label: 'Dashboard', path: '/' },

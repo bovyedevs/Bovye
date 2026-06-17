@@ -112,7 +112,12 @@ export default function FounderDashboard() {
         {/* Soft Background Orbs - Optimized blur for performance */}
         <div className="absolute top-0 right-0 w-[40%] h-[80%] bg-orange-400/5 blur-[80px] pointer-events-none transform-gpu" />
         <div className="absolute bottom-0 left-0 w-[40%] h-[80%] bg-purple-400/5 blur-[80px] pointer-events-none transform-gpu" />
-
+        <div className="flex items-center gap-2.5 text-muted-foreground/80 mb-1.5">
+          <GreetingIcon className="h-4 w-4" />
+          <span className="text-sm font-semibold tracking-wide uppercase">
+            {greeting.text}{firstName ? `, ${firstName}` : ''}
+          </span>
+        </div>
         <div className="max-w-4xl relative z-10">
           <motion.div variants={itemVariants} className="flex items-center gap-2 mb-6">
             <span className="px-3 py-1 rounded-full bg-white border border-border/60 text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 flex items-center gap-1.5 shadow-sm">
