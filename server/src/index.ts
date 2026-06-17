@@ -24,10 +24,23 @@ if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes('localhost') 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true,
-}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
